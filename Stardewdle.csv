@@ -1,0 +1,73 @@
+﻿Crop,Type,Price,Growth,Regrow,Season
+Amaranth,Vegetable,150,7,No,Fall
+Ancient Fruit,Fruit,550,28,Yes,"Spring,Summer,Fall"
+Apple,Fruit,100,28,Yes,Fall
+Apricot,Fruit,50,28,Yes,Spring
+Artichoke,Vegetable,160,8,No,Fall
+Banana,Vegetable,150,28,Yes,Summer
+Beet,Vegetable,100,6,No,Fall
+Blackberry,Fruit,20,7,No,Fall
+Blue Jazz,Flower,50,7,No,Spring
+Blueberry,Fruit,50,13,Yes,Summer
+Bok Choy,Vegetable,80,4,No,Fall
+Broccoli,Vegetable,70,8,Yes,Fall
+Cactus Fruit,Fruit,75,12,Yes,"Spring,Summer,Fall,Winter"
+Carrot,Vegetable,35,3,No,Spring
+Cauliflower,Vegetable,175,12,No,Spring
+Chanterelle,Forage,160,4,No,"Spring,Summer,Fall,Winter"
+Cherry,Fruit,80,28,Yes,Spring
+Coffee Bean,Fruit,15,10,Yes,"Spring,Summer"
+Common Mushroom,Forage,40,7,No,Fall
+Corn,Vegetable,50,14,Yes,"Summer,Fall"
+Cranberries,Fruit,75,7,Yes,Fall
+Crocus,Flower,60,7,No,Winter
+Crystal Fruit,Fruit,150,7,No,Winter
+Daffodil,Forage,30,7,No,Spring
+Dandelion,Forage,40,7,No,Spring
+Eggplant,Vegetable,60,5,Yes,Fall
+Fairy Rose,Flower,290,12,No,Fall
+Garlic,Vegetable,60,4,No,Spring
+Grape,Fruit,80,10,Yes,Fall
+Green Bean,Vegetable,40,10,Yes,Spring
+Hazelnut,Forage,90,7,No,Fall
+Hops,Vegetable,25,11,Yes,Summer
+Hot Pepper,Fruit,40,5,Yes,Summer
+Kale,Vegetable,110,6,No,Spring
+Leek,Forage,60,7,No,Spring
+Mango,Fruit,130,28,Yes,Summer
+Melon,Fruit,250,12,No,Summer
+Morel,Forage,150,4,No,"Spring,Summer,Fall,Winter"
+Orange,Fruit,100,28,Yes,Summer
+Parsnip,Vegetable,35,4,No,Spring
+Peach,Fruit,140,28,Yes,Summer
+Pineapple,Fruit,300,14,Yes,Summer
+Pomegranate,Fruit,140,28,Yes,Fall
+Poppy,Flower,140,7,No,Summer
+Potato,Vegetable,80,6,No,Spring
+Powdermelon,Fruit,60,7,No,Winter
+Pumpkin,Vegetable,320,13,No,Fall
+Purple Mushroom,Forage,250,4,No,"Spring,Summer,Fall,Winter"
+Qi Fruit,Fruit,1,4,No,"Spring,Summer,Fall,Winter"
+Radish,Vegetable,90,6,No,Summer
+Red Cabbage,Vegetable,260,9,No,Summer
+Red Mushroom,Forage,75,4,No,"Spring,Summer,Fall,Winter"
+Rhubarb,Fruit,220,13,No,Spring
+Snow Yam,Forage,100,7,No,Winter
+Spice Berry,Fruit,80,7,No,Summer
+Starfruit,Fruit,750,13,No,Summer
+Strawberry,Fruit,120,8,Yes,Spring
+Summer Spangle,Flower,90,8,No,Summer
+Summer Squash,Vegetable,45,6,Yes,Summer
+Sunflower,Flower,80,8,No,"Summer,Fall"
+Sweet Gem Berry,Fruit,3000,24,No,Fall
+Sweet Pea,Flower,50,7,No,Summer
+Taro Root,Vegetable,100,10,No,Summer
+Tea Leaves,Vegetable,50,10,Yes,"Spring,Summer,Fall"
+Tomato,Vegetable,60,11,Yes,Summer
+Tulip,Flower,30,6,No,Spring
+Unmilled Rice,Vegetable,30,8,No,Spring
+Wheat,Vegetable,25,4,No,"Summer,Fall"
+Wild Horseradish,Forage,50,7,No,Spring
+Wild Plum,Fruit,80,7,No,Fall
+Winter Root,Forage,70,7,No,Winter
+Yam,Vegetable,160,10,No,Fall
