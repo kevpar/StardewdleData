@@ -140,6 +140,19 @@ function Limit-Crop {
 	}
 }
 
+function Get-Crop {
+	[CmdletBinding()]
+	param(
+		[Parameter(ParameterSetName = 'ByName', Mandatory, Position = 0)][string]$Name,
+		[Parameter(ParameterSetName = 'All')][switch]$All
+	)
+
+	switch ($PSCmdlet.ParameterSetName) {
+		'All' { $AllCrops.Values }
+		'ByName' { $AllCrops[$Name] }
+	}
+}
+
 $AllCrops = @{}
 Import-Csv "$PSScriptRoot/Stardewdle.csv" | Foreach-Object {
 	$crop = [Crop]@{
@@ -152,8 +165,6 @@ Import-Csv "$PSScriptRoot/Stardewdle.csv" | Foreach-Object {
 	}
 	$AllCrops[$crop.Name] = $crop
 }
-
-Export-ModuleMember -Variable 'AllCrops'
 
 function GuessStats {
 	[CmdletBinding()]
