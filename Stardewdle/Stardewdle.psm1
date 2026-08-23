@@ -1,18 +1,31 @@
-[CmdletBinding()]
-param()
+Set-StrictMode -Version Latest
+
+enum Season {
+	Spring
+	Summer
+	Fall
+	Winter
+}
+
+enum CropType {
+	Vegetable
+	Fruit
+	Forage
+	Flower
+}
 
 class Crop {
-	[string]$Crop
-	[string]$Type
+	[string]$Name
+	[CropType]$Type
 	[uint]$Price
 	[uint]$Growth
 	[bool]$Regrow
-	[string]$Season
+	[Season[]]$Season
 }
 
 function FormatCrop($crop) {
 	"{0}(Type={1}, Price={2}, Growth={3}, Regrow={4}, Season={5})" -f
-		$crop.Crop, $crop.Type, $crop.Price, $crop.Growth, $crop.Regrow, $crop.Season
+		$crop.Name, $crop.Type, $crop.Price, $crop.Growth, $crop.Regrow, $crop.Season
 }
 
 class Rel {
@@ -73,13 +86,7 @@ function CompNum($guess, $answer) {
 }
 
 function Overlap($guess, $answer) {
-	$guessItems = $guess -split ','
-	$answerItems = $answer -split ','
-	foreach ($guessItem in $guessItems) {
-		if ($guessItem -in $answerItems) {
-			return $true
-		}
-	}
+	[system.linq.enumerable]::Intersect($guess, $answer)
 }
 
 function CompSeason($guess, $answer) {
@@ -114,37 +121,65 @@ function GetRemaining($guess, $answer, $pool) {
 	}
 }
 
-$data = Import-Csv Stardewdle.csv | %{
-	[Crop]@{
-		Crop = $_.Crop
+function Limit-Crop {
+	[CmdletBinding()]
+	param(
+		[Parameter(ValueFromPipeline)][Crop[]]$CropPool,
+		[Parameter(Mandatory, Position = 0)][Crop]$Answer,
+		[Parameter(Mandatory, Position = 1)][Crop]$Guess
+	)
+
+	begin {
+		$relations = GetRelations -answer $Answer -guess $Guess
+	}
+
+	process {
+		if (CompareCrop -guess $Guess -crop $CropPool -rels $relations) {
+			$CropPool
+		}
+	}
+}
+
+$AllCrops = @{}
+Import-Csv "$PSScriptRoot/Stardewdle.csv" | Foreach-Object {
+	$crop = [Crop]@{
+		Name = $_.Crop
 		Type = $_.Type
 		Price = $_.Price
 		Growth = $_.Growth
 		Regrow = $_.Regrow -eq 'Yes'
 		Season = $_.Season
 	}
+	$AllCrops[$crop.Name] = $crop
 }
 
-$guessStats = @{}
-foreach ($guess in $data) {
-	foreach ($answer in $data) {
-		$options = GetRemaining -guess $guess -answer $answer -pool $data
-		for ($i = 0; $i -lt $options.Count; $i++) {
-			Write-Verbose "Option #${i}: $(FormatCrop $options[$i])"
+Export-ModuleMember -Variable 'AllCrops'
+
+function GuessStats {
+	[CmdletBinding()]
+	param()
+
+	$guessStats = @{}
+	foreach ($guess in $AllCrops) {
+		foreach ($answer in $AllCrops) {
+			$options = GetRemaining -guess $guess -answer $answer -pool $AllCrops
+			for ($i = 0; $i -lt $options.Count; $i++) {
+				Write-Verbose "Option #${i}: $(FormatCrop $options[$i])"
+			}
+			if (!$guessStats.ContainsKey($guess.Name)) {
+				$guessStats[$guess.Name] = @()
+			}
+			$guessStats[$guess.Name] += $options.Count
 		}
-		if (!$guessStats.ContainsKey($guess.Crop)) {
-			$guessStats[$guess.Crop] = @()
-		}
-		$guessStats[$guess.Crop] += $options.Count
 	}
-}
 
-foreach ($kvp in $guessStats.GetEnumerator()) {
-	[pscustomobject]@{
-		Crop = $kvp.Name
-		Average = ($kvp.Value | Measure-Object -Average).Average
-		Median = ($kvp.Value | Sort-Object)[$kvp.Value.Length / 2]
-		StdDev = ($kvp.Value | Measure-Object -StandardDeviation).StandardDeviation
-		Maximum = ($kvp.Value | Measure-Object -Maximum).Maximum
+	foreach ($kvp in $guessStats.GetEnumerator()) {
+		[pscustomobject]@{
+			Crop = $kvp.Name
+			Average = ($kvp.Value | Measure-Object -Average).Average
+			Median = ($kvp.Value | Sort-Object)[$kvp.Value.Length / 2]
+			StdDev = ($kvp.Value | Measure-Object -StandardDeviation).StandardDeviation
+			Maximum = ($kvp.Value | Measure-Object -Maximum).Maximum
+		}
 	}
 }
