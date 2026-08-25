@@ -25,7 +25,7 @@ class Crop {
 
 function FormatCrop($crop) {
 	"{0}(Type={1}, Price={2}, Growth={3}, Regrow={4}, Season={5})" -f
-		$crop.Name, $crop.Type, $crop.Price, $crop.Growth, $crop.Regrow, $crop.Season
+		$crop.Name, $crop.Type, $crop.Price, $crop.Growth, $crop.Regrow, ($crop.Season -join ',')
 }
 
 class Rel {
@@ -53,7 +53,7 @@ function CompareCrop($guess, $crop, $rels) {
 		return $false
 	}
 	if (!(& $rels.Season.Script $guess.Season $crop.Season)) {
-		Write-Debug "Type comparison failed"
+		Write-Debug "Season comparison failed"
 		return $false
 	}
 	Write-Debug "Comparison succeeded!"
@@ -65,6 +65,7 @@ $relNe = [Rel]@{Name = 'Ne'; Script = {$args[0] -ne $args[1]}}
 $relLt = [Rel]@{Name = 'Lt'; Script = {$args[0] -lt $args[1]}}
 $relGt = [Rel]@{Name = 'Gt'; Script = {$args[0] -gt $args[1]}}
 $relOv = [Rel]@{Name = 'Ov'; Script = {Overlap $args[0] $args[1]}}
+$relNo = [Rel]@{Name = 'No'; Script = {!(Overlap $args[0] $args[1])}}
 
 function CompEquality($guess, $answer) {
 	if ($guess -eq $answer) {
@@ -95,7 +96,7 @@ function CompSeason($guess, $answer) {
 	} elseif (Overlap -guess $guess -answer $answer) {
 		return $relOv
 	} else {
-		return $relNe
+		return $relNo
 	}
 }
 
@@ -130,12 +131,23 @@ function Limit-Crop {
 	)
 
 	begin {
+		Write-Debug "Answer: $(FormatCrop $Answer)"
+		Write-Debug "Guess: $(Formatcrop $Guess)"
+
 		$relations = GetRelations -answer $Answer -guess $Guess
+
+		Write-Debug "Type relation: $($relations.Type.Name)"
+		Write-Debug "Price relation: $($relations.Price.Name)"
+		Write-Debug "Growth relation: $($relations.Growth.Name)"
+		Write-Debug "Regrow relation: $($relations.Regrow.Name)"
+		Write-Debug "Season relation: $($relations.Season.Name)"
 	}
 
 	process {
-		if (CompareCrop -guess $Guess -crop $CropPool -rels $relations) {
-			$CropPool
+		foreach ($crop in $CropPool) {
+			if (CompareCrop -guess $Guess -crop $crop -rels $relations) {
+				$CropPool
+			}
 		}
 	}
 }
@@ -161,7 +173,7 @@ Import-Csv "$PSScriptRoot/Stardewdle.csv" | Foreach-Object {
 		Price = $_.Price
 		Growth = $_.Growth
 		Regrow = $_.Regrow -eq 'Yes'
-		Season = $_.Season
+		Season = $_.Season -split ','
 	}
 	$AllCrops[$crop.Name] = $crop
 }

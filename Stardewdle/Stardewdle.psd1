@@ -5,6 +5,9 @@
         'Limit-Crop',
         'Get-Crop'
     )
+    FormatsToProcess = @(
+        'Format.ps1xml'
+    )
     DefaultCommandPrefix = 'Stardewdle'
     RootModule = '.\Stardewdle.psm1'
 }
